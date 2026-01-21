@@ -10,7 +10,8 @@ const swaggerSpec = swaggerJSDoc({
     },
     servers: [
       {
-        url: "http://localhost:4000",
+        //url: "http://localhost:4000",
+        url: "https://e-commerce-api-2ckt.onrender.com",
       },
     ],
 
@@ -45,9 +46,9 @@ const swaggerSpec = swaggerJSDoc({
             role: {
               type: "string",
               enum: ["user", "admin", "vendor"],
-              default: "user"
-            }
-          }
+              default: "user",
+            },
+          },
         },
 
         registerRequest: {
@@ -56,8 +57,8 @@ const swaggerSpec = swaggerJSDoc({
           properties: {
             name: { type: "string" },
             email: { type: "string" },
-            password: { type: "string" }
-          }
+            password: { type: "string" },
+          },
         },
 
         loginRequest: {
@@ -65,8 +66,8 @@ const swaggerSpec = swaggerJSDoc({
           required: ["email", "password"],
           properties: {
             email: { type: "string" },
-            password: { type: "string" }
-          }
+            password: { type: "string" },
+          },
         },
 
         category: {
@@ -110,7 +111,7 @@ const swaggerSpec = swaggerJSDoc({
       },
     },
   },
-    apis: ["./src/Routes/*.ts"],
+  apis: ["./src/Routes/*.ts"],
 });
 
 export default swaggerSpec;
