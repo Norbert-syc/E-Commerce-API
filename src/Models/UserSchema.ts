@@ -1,0 +1,1 @@
+// This file is intentionally empty - user schema is defined in UserModel.ts
