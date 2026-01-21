@@ -10,8 +10,7 @@ const swaggerSpec = swaggerJSDoc({
     },
     servers: [
       {
-        //url: "http://localhost:4000",
-        url: "https://e-commerce-api-2ckt.onrender.com",
+        url: process.env.NODE_ENV === 'production' ? 'https://e-commerce-api-2ckt.onrender.com' : 'http://localhost:4000',
       },
     ],
 
