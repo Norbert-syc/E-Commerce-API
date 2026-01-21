@@ -18,7 +18,7 @@ const router = express.Router();
  */
 
 
-router.get('/', authMiddleware, controller.getCategories);
+router.get('/',  controller.getCategories);
 
 /**
  * @swagger
@@ -39,7 +39,7 @@ router.get('/', authMiddleware, controller.getCategories);
  *         description: Category not found
  */
 
-router.get("/:id", authMiddleware, controller.getCategoriesById);
+router.get("/:id",  controller.getCategoriesById);
 
 /**
  * @swagger

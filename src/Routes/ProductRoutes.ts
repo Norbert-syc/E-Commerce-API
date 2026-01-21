@@ -40,7 +40,7 @@ router.post("/", requireRole(["admin","vendor"]), controller.createProduct);
  *         description: List of products
  */
 
-router.get("/", authMiddleware, controller.getProducts);
+router.get("/", controller.getProducts);
 
 /**
  * @swagger
@@ -61,7 +61,7 @@ router.get("/", authMiddleware, controller.getProducts);
  *         description: Product not found
  */
 
-router.get("/:id", authMiddleware, controller.getProductById);
+router.get("/:id",  controller.getProductById);
 
 
 /**
