@@ -16,10 +16,16 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : "http://localhost:5173",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: true, // allow all origins dynamically
+    credentials: true,
+  }),
+);
+
+
+
+
 
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
