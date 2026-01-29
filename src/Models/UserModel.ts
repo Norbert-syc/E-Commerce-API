@@ -20,6 +20,7 @@ const UserSchema = new Schema<IUser>({
     password: {
         type: String,
         required: true,
+        select: false, // Exclude password field by default
     },
     role: {
         type: String,

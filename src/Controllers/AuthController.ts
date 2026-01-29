@@ -43,7 +43,8 @@ export const register = async (req: Request, res: Response) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("REGISTERED ERROR:", error);
+        res.status(500).json({ message: "Register failed" });
     }
 };
 
@@ -55,7 +56,7 @@ export const login = async (req: Request, res: Response) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select("+password");
         if (!user) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
@@ -76,7 +77,8 @@ export const login = async (req: Request, res: Response) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("LOGIN ERROR:", error);
+        res.status(500).json({ message: "Login failed" });
     }
 };
     
