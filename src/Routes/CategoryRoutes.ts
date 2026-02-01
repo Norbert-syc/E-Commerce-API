@@ -47,21 +47,19 @@ router.get("/:id",  controller.getCategoriesById);
  *   post:
  *     tags: [categories]
  *     summary: Create a category
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
+ *             $ref: '#/components/schemas/Category'
  *     responses:
  *       201:
  *         description: Category created
  */
+
 router.post('/', authMiddleware, controller.createCategory);
 
 

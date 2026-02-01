@@ -17,8 +17,10 @@ export const getCategoriesById = async (req: Request, res: Response) => {
 
 export const createCategory = async (req: Request, res: Response) => {
   const newCategory = new CategorySchema({
+    id: req.body.id,
     name: req.body.name,
     description: req.body.description,
+    image: req.body.image,
   });
   await newCategory.save();
   res.status(201).json(newCategory);

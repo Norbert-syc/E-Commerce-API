@@ -10,7 +10,10 @@ const swaggerSpec = swaggerJSDoc({
     },
     servers: [
       {
-        url: process.env.NODE_ENV === 'production' ? 'https://e-commerce-api-2ckt.onrender.com' : 'http://localhost:4000',
+        url:
+          process.env.NODE_ENV === "production"
+            ? "https://e-commerce-api-2ckt.onrender.com"
+            : "http://localhost:4000",
       },
     ],
 
@@ -69,12 +72,15 @@ const swaggerSpec = swaggerJSDoc({
           },
         },
 
-        category: {
+        Category: {
+          // ✅ PascalCase
           type: "object",
+          required: ["name", "image"],
           properties: {
             id: { type: "string" },
             name: { type: "string" },
             description: { type: "string" },
+            image: { type: "string" },
           },
         },
 
@@ -88,13 +94,14 @@ const swaggerSpec = swaggerJSDoc({
             category: { type: "string" },
             categoryId: { type: "string" },
             quantity: { type: "number" },
+            image: { type: "string" },
           },
         },
 
         cart: {
           type: "object",
           properties: {
-            id: { type: "string" },
+            userId: { type: "string" },
             items: {
               type: "array",
               items: {

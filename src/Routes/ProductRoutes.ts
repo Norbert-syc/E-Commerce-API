@@ -27,7 +27,13 @@ const router = express.Router();
  *       403:
  *         description: Forbidden
  */
-router.post("/", requireRole(["admin","vendor"]), controller.createProduct);
+router.post(
+  "/",
+  authMiddleware,
+  requireRole(["admin", "vendor"]),
+  controller.createProduct,
+);
+
 
 /**
  * @swagger
@@ -64,23 +70,7 @@ router.get("/", controller.getProducts);
 router.get("/:id",  controller.getProductById);
 
 
-/**
- * @swagger
- * /api/products:
- *   post:
- *     tags: [products]
- *     summary: Create a product
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/product'
- *     responses:
- *       201:
- *         description: Product created
- */
-router.post("/", authMiddleware, controller.createProduct);
+
 
 /**
  * @swagger

@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
-import ProductSchema from "../Models/ProductSchema";
+import Product from "../Models/ProductModel";
 
-export const getProducts = async (req: Request, res: Response) => {
-  const products = await ProductSchema.find();
+export const getProducts = async (_req: Request, res: Response) => {
+  const products = await Product.find().populate("categoryId");
   res.json(products);
 };
 
 export const getProductById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const product = await ProductSchema.findById(id);
+  const product = await Product.findById(req.params.id).populate("categoryId");
   if (!product) {
     return res.status(404).json({ message: "Product not found" });
   }
@@ -16,40 +15,29 @@ export const getProductById = async (req: Request, res: Response) => {
 };
 
 export const createProduct = async (req: Request, res: Response) => {
-  const { name, price, categoryId, description, quantity } = req.body;
-
-  if (!name || price === undefined || !categoryId) {
-    return res.status(400).json({
-      message: "Missing required fields: name, price, and categoryId are required.",
-    });
+  try {
+    const product = await Product.create(req.body);
+    res.status(201).json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
-
-  const newProduct = new ProductSchema({
-    name,
-    price,
-    categoryId,
-    description,
-    quantity,
-  });
-  await newProduct.save();
-  res.status(201).json(newProduct);
 };
 
 export const updateProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const product = await ProductSchema.findByIdAndUpdate(id, req.body, {
+  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
+
   if (!product) {
     return res.status(404).json({ message: "Product not found" });
   }
+
   res.json(product);
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const product = await ProductSchema.findByIdAndDelete(id);
+  const product = await Product.findByIdAndDelete(req.params.id);
   if (!product) {
     return res.status(404).json({ message: "Product not found" });
   }
