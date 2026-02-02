@@ -1,5 +1,5 @@
 export interface CartItem {
-    productId: string;
+    productId: any; // ObjectId reference to Product
     quantity: number;
 }
 
