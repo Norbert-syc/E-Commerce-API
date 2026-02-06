@@ -10,6 +10,8 @@ import ProductRoutes from "./Routes/ProductRoutes";
 import CartRoutes from "./Routes/CartRoutes";
 import AuthRoutes from "./Routes/AuthRoutes";
 import adminRoutes from "./Routes/adminRoutes";
+import orderRoutes from "./Routes/orderRoutes";
+
 
 dotenv.config();
 
@@ -41,6 +43,7 @@ app.use("/api/categories", CategoryRoutes);
 app.use("/api/products", ProductRoutes);
 app.use("/api/carts", CartRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/orders", orderRoutes)
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

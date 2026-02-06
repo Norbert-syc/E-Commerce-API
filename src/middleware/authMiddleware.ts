@@ -3,14 +3,13 @@ import jwt from "jsonwebtoken";
 
 interface JwtPayload {
     userId: string;
-    role: "user" | "admin" | "vendor";
 }
 
 declare global {
     namespace Express {
         interface Request {
             userId?: string;
-            userRole?: "user" | "admin" | "vendor";
+            userRole?: string;
         }
     }
 }
@@ -25,9 +24,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
         req.userId = decoded.userId;
-        req.userRole = decoded.role;
         next();
-    } catch  {
+    } catch (error) {
         return res.status(401).json({ message: "Invalid token" });
     }
 };

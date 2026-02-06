@@ -8,13 +8,13 @@ const router = Router();
  * /api/auth/register:
  *   post:
  *     tags: [auth]
- *     summary: Register a new user
+ *     summary: Register new user
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/registerRequest'
+ *             $ref: '#/components/schemas/RegisterRequest'
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -22,23 +22,25 @@ const router = Router();
 router.post("/register", register);
 
 
+
 /**
  * @swagger
  * /api/auth/login:
  *   post:
  *     tags: [auth]
- *     summary: Login user and get JWT
+ *     summary: Login user
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/loginRequest'
+ *             $ref: '#/components/schemas/LoginRequest'
  *     responses:
  *       200:
  *         description: Login successful
  */
 router.post("/login", login);
+
 
 
 

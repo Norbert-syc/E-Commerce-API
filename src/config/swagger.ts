@@ -3,17 +3,20 @@ import swaggerJSDoc from "swagger-jsdoc";
 const swaggerSpec = swaggerJSDoc({
   definition: {
     openapi: "3.0.0",
+
     info: {
       title: "E-commerce API",
       version: "1.0.0",
       description: "API documentation for the E-commerce application",
     },
+
     servers: [
       {
         url:
           process.env.NODE_ENV === "production"
             ? "https://e-commerce-api-2ckt.onrender.com"
             : "http://localhost:4000",
+        description: "Main API server",
       },
     ],
 
@@ -24,10 +27,11 @@ const swaggerSpec = swaggerJSDoc({
     ],
 
     tags: [
-      { name: "auth", description: "authentication endpoints" },
-      { name: "categories", description: "category management" },
-      { name: "products", description: "product management" },
-      { name: "carts", description: "cart operations" },
+      { name: "auth", description: "Authentication endpoints" },
+      { name: "categories", description: "Category management" },
+      { name: "products", description: "Product management" },
+      { name: "carts", description: "Cart operations" },
+      { name: "orders", description: "Order management" },
     ],
 
     components: {
@@ -38,8 +42,10 @@ const swaggerSpec = swaggerJSDoc({
           bearerFormat: "JWT",
         },
       },
+
       schemas: {
-        user: {
+        /* ================= USERS ================= */
+        User: {
           type: "object",
           properties: {
             id: { type: "string" },
@@ -53,7 +59,7 @@ const swaggerSpec = swaggerJSDoc({
           },
         },
 
-        registerRequest: {
+        RegisterRequest: {
           type: "object",
           required: ["name", "email", "password"],
           properties: {
@@ -63,7 +69,7 @@ const swaggerSpec = swaggerJSDoc({
           },
         },
 
-        loginRequest: {
+        LoginRequest: {
           type: "object",
           required: ["email", "password"],
           properties: {
@@ -72,8 +78,8 @@ const swaggerSpec = swaggerJSDoc({
           },
         },
 
+        /* ================= CATEGORIES ================= */
         Category: {
-          // ✅ PascalCase
           type: "object",
           required: ["name", "image"],
           properties: {
@@ -84,7 +90,8 @@ const swaggerSpec = swaggerJSDoc({
           },
         },
 
-        product: {
+        /* ================= PRODUCTS ================= */
+        Product: {
           type: "object",
           properties: {
             id: { type: "string" },
@@ -98,26 +105,96 @@ const swaggerSpec = swaggerJSDoc({
           },
         },
 
-        cart: {
+        /* ================= CART ================= */
+        CartItem: {
+          type: "object",
+          required: ["productId", "quantity"],
+          properties: {
+            productId: {
+              type: "string",
+              example: "64f1a2b9c12a3b00123abcd1",
+            },
+            quantity: {
+              type: "number",
+              example: 2,
+            },
+          },
+        },
+
+        Cart: {
           type: "object",
           properties: {
-            userId: { type: "string" },
+            userId: {
+              type: "string",
+              example: "64f1a2b9c12a3b00123abcd1",
+            },
             items: {
               type: "array",
               items: {
-                type: "object",
-                properties: {
-                  productId: { type: "string" },
-                  quantity: { type: "number" },
-                },
+                $ref: "#/components/schemas/CartItem",
               },
+            },
+          },
+        },
+
+        /* ================= ORDERS ================= */
+        OrderItem: {
+          type: "object",
+          required: ["productId", "quantity", "price"],
+          properties: {
+            productId: {
+              type: "string",
+              example: "64f1a2b9c12a3b00123abcd1",
+            },
+            quantity: {
+              type: "number",
+              example: 1,
+            },
+            price: {
+              type: "number",
+              example: 49.99,
+            },
+          },
+        },
+
+        Order: {
+          type: "object",
+          properties: {
+            _id: {
+              type: "string",
+              example: "65aa12fbc45de90012abcd99",
+            },
+            userId: {
+              type: "string",
+              example: "64f1a2b9c12a3b00123abcd1",
+            },
+            items: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/OrderItem",
+              },
+            },
+            totalAmount: {
+              type: "number",
+              example: 99.98,
+            },
+            status: {
+              type: "string",
+              enum: ["pending", "paid", "shipped"],
+              example: "pending",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
             },
           },
         },
       },
     },
   },
-  apis: ["./src/Routes/*.ts"],
+
+  /* 🔥 VERY IMPORTANT */
+  apis: ["./src/routes/*.ts"],
 });
 
 export default swaggerSpec;
