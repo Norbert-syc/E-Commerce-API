@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Order from "../models/OrderModel";
+import Order from "../Models/OrderModel";
 
 /**
  * @desc    Create new order (USER)
