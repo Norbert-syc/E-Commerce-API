@@ -114,9 +114,9 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
  */
 export const deleteOrder = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({ message: "Order not found" });
     }
 
