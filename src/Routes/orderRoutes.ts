@@ -77,21 +77,19 @@ router.get("/my", authMiddleware, getMyOrders);
  * @swagger
  * /api/orders:
  *   get:
- *     summary: Get all orders (Admin only)
+ *     summary: Get orders (all for admin, own for users)
  *     tags: [orders]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of all orders
+ *         description: List of orders
  *       401:
  *         description: Unauthorized
- *       403:
- *         description: Forbidden (Admin only)
  *       500:
  *         description: Server error
  */
-router.get("/", authMiddleware, requireRole(["admin"]), getAllOrders);
+router.get("/", authMiddleware, getAllOrders);
 
 /**
  * @swagger

@@ -65,19 +65,25 @@ export const getMyOrders = async (req: Request, res: Response) => {
 };
 
 /**
- * @desc    Get all orders (ADMIN)
+ * @desc    Get all orders (ADMIN) or user's orders (USER)
  * @route   GET /api/orders
- * @access  Admin
+ * @access  Private
  */
-export const getAllOrders = async (_req: Request, res: Response) => {
+export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const orders = await Order.find()
-      .populate("userId", "name email")
-      .sort({ createdAt: -1 });
+    const isAdmin = req.userRole === "admin";
 
+    if (isAdmin) {
+      const orders = await Order.find()
+        .populate("userId", "name email")
+        .sort({ createdAt: -1 });
+      return res.status(200).json(orders);
+    }
+
+    const orders = await Order.find({ userId: req.userId }).sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
-    console.error("Get all orders error:", error);
+    console.error("Get orders error:", error);
     res.status(500).json({ message: "Failed to fetch orders" });
   }
 };
