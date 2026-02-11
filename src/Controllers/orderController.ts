@@ -80,6 +80,10 @@ export const getAllOrders = async (req: Request, res: Response) => {
       return res.status(200).json(orders);
     }
 
+    if (!req.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const orders = await Order.find({ userId: req.userId }).sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
