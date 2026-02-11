@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Order from "../Models/OrderModel";
+import mongoose from "mongoose";
 
 /**
  * @desc    Create new order (USER)
@@ -103,5 +104,29 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Update order status error:", error);
     res.status(500).json({ message: "Failed to update order" });
+  }
+};
+
+/**
+ * @desc    Delete order (ADMIN)
+ * @route   DELETE /api/orders/:id
+ * @access  Admin
+ */
+export const deleteOrder = async (req: Request, res: Response) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const order = await Order.findByIdAndDelete(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    console.error("Delete order error:", error);
+    res.status(500).json({ message: "Failed to delete order" });
   }
 };

@@ -4,8 +4,10 @@ import {
   getMyOrders,
   getAllOrders,
   updateOrderStatus,
+  deleteOrder,
 } from "../Controllers/orderController";
 import { authMiddleware } from "../middleware/authMiddleware";
+import { requireRole } from "../middleware/roleMiddleware";
 
 const router = Router();
 
@@ -89,7 +91,36 @@ router.get("/my", authMiddleware, getMyOrders);
  *       500:
  *         description: Server error
  */
-router.get("/", authMiddleware, getAllOrders);
+router.get("/", authMiddleware, requireRole(["admin"]), getAllOrders);
+
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   delete:
+ *     summary: Delete an order (Admin only)
+ *     tags: [orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     responses:
+ *       200:
+ *         description: Order deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (Admin only)
+ *       404:
+ *         description: Order not found
+ *       500:
+ *         description: Server error
+ */
+router.delete("/:id", authMiddleware, requireRole(["admin"]), deleteOrder);
 
 /**
  * @swagger
@@ -130,6 +161,6 @@ router.get("/", authMiddleware, getAllOrders);
  *       500:
  *         description: Server error
  */
-router.put("/:id/status", authMiddleware, updateOrderStatus);
+router.put("/:id/status", authMiddleware, requireRole(["admin"]), updateOrderStatus);
 
 export default router;
