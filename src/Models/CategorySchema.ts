@@ -5,7 +5,7 @@ const categorySchema = new Schema<Category>({
   id: { type: String, unique: true },
   name: { type: String, required: true },
   description: { type: String },
-  image: { type: String, required: true },
+  image: { type: String },
 }, { timestamps: true });
 
 export default mongoose.model<Category>("Category", categorySchema);

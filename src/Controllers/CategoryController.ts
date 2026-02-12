@@ -27,10 +27,16 @@ export const getCategoriesById = async (req: Request, res: Response) => {
 
 export const createCategory = async (req: Request, res: Response) => {
   try {
+    const { name, description, image } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
     const newCategory = new CategorySchema({
-      name: req.body.name,
-      description: req.body.description,
-      image: req.body.image,
+      name,
+      description: description || "",
+      image: image || "",
     });
     await newCategory.save();
     res.status(201).json(newCategory);
