@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import {updateUserRole} from "../Controllers/adminController";
+import {updateUserRole, fixCategoryIndex} from "../Controllers/adminController";
 import { authMiddleware } from "../middleware/authMiddleware";
 import {requireRole} from"../middleware/roleMiddleware";
 
@@ -44,6 +44,13 @@ router.patch(
   authMiddleware,
   requireRole(["admin"]),
   updateUserRole,
+);
+
+router.post(
+  "/fix-category-index",
+  authMiddleware,
+  requireRole(["admin"]),
+  fixCategoryIndex,
 );
 
 
