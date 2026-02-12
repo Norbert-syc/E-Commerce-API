@@ -35,8 +35,10 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 connectDB().then(async () => {
   try {
-    await mongoose.connection.db.collection('categories').dropIndex('id_1');
-    console.log('Dropped id_1 index from categories');
+    if (mongoose.connection.db) {
+      await mongoose.connection.db.collection('categories').dropIndex('id_1');
+      console.log('Dropped id_1 index from categories');
+    }
   } catch (error: any) {
     if (error.code !== 27) {
       console.log('Index id_1 does not exist or already dropped');
