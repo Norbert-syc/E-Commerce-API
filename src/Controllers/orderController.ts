@@ -102,12 +102,17 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     const { status } = req.body;
     const id = req.params.id as string;
 
+    console.log("Update status request:", { id, status, body: req.body });
+
     if (!status) {
       return res.status(400).json({ message: "Status is required" });
     }
 
-    if (!["pending", "paid", "shipped"].includes(status)) {
-      return res.status(400).json({ message: "Invalid status value" });
+    const validStatuses = ["pending", "paid", "shipped"];
+    if (!validStatuses.includes(status.toLowerCase())) {
+      return res.status(400).json({ 
+        message: `Invalid status value. Must be one of: ${validStatuses.join(", ")}` 
+      });
     }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -120,7 +125,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    order.status = status;
+    order.status = status.toLowerCase();
     await order.save();
 
     res.status(200).json(order);
