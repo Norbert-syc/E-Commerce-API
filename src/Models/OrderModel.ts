@@ -10,7 +10,7 @@ export interface Order {
   userId: string;
   items: OrderItem[];
   totalAmount: number;
-  status: "pending" | "paid" | "shipped";
+  status: "pending" | "processing" | "paid" | "shipped";
 }
 
 const orderItemSchema = new Schema<OrderItem>(
@@ -29,7 +29,7 @@ const orderSchema = new Schema<Order>(
     totalAmount: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["pending", "paid", "shipped"],
+      enum: ["pending", "processing", "paid", "shipped"],
       default: "pending",
     },
   },

@@ -119,7 +119,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     }
 
     const normalizedStatus = String(status).toLowerCase();
-    const validStatuses = ["pending", "paid", "shipped"];
+    const validStatuses = ["pending", "processing", "paid", "shipped"];
     
     if (!validStatuses.includes(normalizedStatus)) {
       return res.status(400).json({ 
@@ -138,7 +138,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    order.status = normalizedStatus as "pending" | "paid" | "shipped";
+    order.status = normalizedStatus as "pending" | "processing" | "paid" | "shipped";
     await order.save();
 
     console.log("Order status updated successfully:", { id, newStatus: normalizedStatus });
