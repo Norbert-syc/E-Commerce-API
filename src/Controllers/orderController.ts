@@ -100,8 +100,21 @@ export const getAllOrders = async (req: Request, res: Response) => {
 export const updateOrderStatus = async (req: Request, res: Response) => {
   try {
     const { status } = req.body;
+    const id = req.params.id as string;
 
-    const order = await Order.findById(req.params.id);
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
+
+    if (!["pending", "paid", "shipped"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const order = await Order.findById(id);
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
