@@ -99,19 +99,32 @@ export const getAllOrders = async (req: Request, res: Response) => {
  */
 export const updateOrderStatus = async (req: Request, res: Response) => {
   try {
-    const { status } = req.body;
     const id = req.params.id as string;
+    
+    console.log("Update status request:", {
+      id,
+      body: req.body,
+      headers: req.headers['content-type']
+    });
 
-    console.log("Update status request:", { id, status, body: req.body });
+    // Accept status from body in various formats
+    const status = req.body.status || req.body.orderStatus || req.body.newStatus;
 
     if (!status) {
-      return res.status(400).json({ message: "Status is required" });
+      console.log("Status missing from body:", req.body);
+      return res.status(400).json({ 
+        message: "Status is required",
+        received: req.body 
+      });
     }
 
+    const normalizedStatus = String(status).toLowerCase();
     const validStatuses = ["pending", "paid", "shipped"];
-    if (!validStatuses.includes(status.toLowerCase())) {
+    
+    if (!validStatuses.includes(normalizedStatus)) {
       return res.status(400).json({ 
-        message: `Invalid status value. Must be one of: ${validStatuses.join(", ")}` 
+        message: `Invalid status value. Must be one of: ${validStatuses.join(", ")}`,
+        received: status
       });
     }
 
@@ -125,9 +138,10 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    order.status = status.toLowerCase();
+    order.status = normalizedStatus as "pending" | "paid" | "shipped";
     await order.save();
 
+    console.log("Order status updated successfully:", { id, newStatus: normalizedStatus });
     res.status(200).json(order);
   } catch (error) {
     console.error("Update order status error:", error);
